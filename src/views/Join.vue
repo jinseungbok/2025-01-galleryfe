@@ -1,10 +1,10 @@
 <script setup>
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
-import { join } from "@/Services/accountService";
+import { join } from "@/services/accountService";
 
-// 로그인 화면 이동
 const router = useRouter();
+
 const state = reactive({
   form: {
     name: "",
@@ -12,10 +12,9 @@ const state = reactive({
     loginPw: "",
   },
 });
-
 const submit = async () => {
   const res = await join(state.form);
-
+  console.log("res:", res);
   if (res.status === 200) {
     alert("회원가입을 축하합니다.");
     await router.push("/");
@@ -55,6 +54,7 @@ const submit = async () => {
             id="loginPw"
             placeholder="패스워드"
             v-model="state.form.loginPw"
+            autocomplete="off"
           />
           <label for="loginPw">패스워드</label>
         </div>
@@ -65,7 +65,7 @@ const submit = async () => {
 </template>
 
 <style lang="scss" scoped>
-.join > .container {
+.container {
   max-width: 576px;
 }
 </style>
