@@ -17,11 +17,16 @@ const submit = async () => {
 
   switch (res.status) {
     case 200:
-      await router.push("/");
+    const name = res.data.name;
+    alert(`${name}님 로그인 되었습니다`);
+    await router.push("/");
       break;
     case 404:
       alert("아이디/비밀번호를 확인해 주세요.");
       break;
+    default:
+      alert("로그인 중 오류가 발생했습니다.");
+      console.error(res);
   }
 };
 

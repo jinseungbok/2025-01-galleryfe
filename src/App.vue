@@ -1,5 +1,5 @@
 <script setup>
-import Header from "./components/header.vue";
+import Header from "../src/components/Header.vue";
 import Footer from "./components/Footer.vue";
 import { watch, onMounted } from "vue";
 import { useRoute } from "vue-router";
