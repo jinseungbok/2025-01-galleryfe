@@ -1,6 +1,6 @@
 <script setup>
-import { reactive, onMounted } from 'vue';
-import { getItems, removeItem } from '../Services/cartService';
+import { reactive, onMounted, computed } from 'vue';
+import { getItems, removeItem, removeAll } from '../Services/cartService';
 
 // 반응형 상태
 const state = reactive({
@@ -27,6 +27,29 @@ const remove = async cart_id => {
     // 다시 리로딩 or 방금 삭제한 객체만 state.items에서 삭제
 }
 
+const totalQuantity = computed(() => {
+    return state.items.reduce((sum, item) => sum + (item.quantity ?? 1), 0);
+});
+
+// ✅ 총 금액 계산 (할인 포함)
+const totalPrice = computed(() => {
+    return state.items.reduce((sum, item) => {
+        const discounted = item.price - (item.price * item.discountPer / 100);
+        return sum + discounted * (item.quantity ?? 1);
+    }, 0);
+});
+
+const clear = async cart_id => {
+    const confirmed = confirm("장바구니의 아이템을 삭제하시겠습니까?");
+    if(!confirmed) return;
+
+    const res = await removeAll();
+    if(res === undefined || res.status !== 200) {
+    }
+        alert("장바구니의 아이템이 모두 삭제되었습니다.")
+        state.items = [];
+};
+
 onMounted( () => {
     load();
 });
@@ -46,8 +69,13 @@ onMounted( () => {
                         <span class="remove float-end" @click="remove(item.id)" title="삭제">&times;</span>
                     </li>
                 </ul>
-                <div class="act">
-                    <router-link to="/order" class="btn btn-primary">주문하기</router-link>
+                <div class="summary text-end mt-4">
+                    <div>총 수량: {{ totalQuantity }}개</div>
+                    <div>총 합계: {{ totalPrice.toLocaleString() }}원</div>
+                </div>
+                <div class="act d-flex justify-contents-between gap-5">
+                    <button @click="clear" class="btn btn-danger mb-3">장바구니 비우기</button>
+                    <router-link to="/order" class="btn btn-primary mb-3">주문하기</router-link>
                 </div>
             </template>
             <template v-else>
@@ -59,7 +87,7 @@ onMounted( () => {
 
 <style lang="scss" scoped>
 .cart {
-    li { border: 1px solid #eee; margin-top: 25px; margin-bottom: 25px; }
+    li { border: 1px solid black; margin-top: 25px; margin-bottom: 25px; }
     img { width: 150px; height: 150px; }
 
     .items { list-style: none; margin: 0; padding: 0; }
@@ -68,5 +96,17 @@ onMounted( () => {
     .remove { cursor: pointer; font-size: 30px; padding: 5px 15px; }    
 }
 
-.act .btn { width: 300px; display: block; margin: 0 auto; padding: 30px 50px; font-size: 20px; }
+.act .btn { width: 300px; display: block; padding: 20px 50px; font-size: 20px; }
+
+.summary {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 20px;
+  font-display: flex;
+
+  div {
+    margin-bottom: 5px;
+    padding: 10px;
+  }
+}
 </style>

@@ -2,6 +2,9 @@
 import { computed } from 'vue';
 import { addItem } from '../Services/cartService';
 import { useAccountStore } from "@/stores/account";
+import { useRouter, useRoute } from 'vue-router';
+
+const router = useRouter();
 
 const account = useAccountStore();
 
@@ -24,10 +27,14 @@ const put = async () => {
     }
 const res = await addItem(props.item.id);
     if(res === undefined || res.status !== 200) {
-    alert("장바구니에 담았습니다.");
+    alert("이미 추가된 물품입니다.");
     return;
 }
-    console.log('카트 담기 성공!');
+else if(confirm('장바구니에 상품을 담았습니다. 장바구니로 이동하시겠습니까?')) {
+    router.push("/cart")
+}
+// 장바구니 화면으로 라우팅
+    console.log("카트 담기 성공!");
 }
 
 </script>

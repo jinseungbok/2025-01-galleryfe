@@ -14,11 +14,12 @@ const state = reactive({
 
 const submit = async () => {
   const res = await login(state.form);
+  console.log("로그인 응답:", res.data);
 
   switch (res.status) {
     case 200:
-    const name = res.data.name;
-    alert(`${name}님 로그인 되었습니다`);
+    const name = res.data.name || res.data.user?.name || "사용자";
+    alert(`${name}님 로그인 되었습니다.`);
     await router.push("/");
       break;
     case 404:
@@ -66,7 +67,7 @@ const submit = async () => {
           />
           <label for="loginPw">패스워드</label>
         </div>
-        <button class="w-100 h6 btn py-3 btn-primary">로그인</button>
+        <button class="w-100 h6 btn py-3 bg-black btn-primary" style="border: none;">로그인</button>
       </form>
     </div>
   </div>

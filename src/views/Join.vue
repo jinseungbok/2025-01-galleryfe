@@ -1,7 +1,7 @@
 <script setup>
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
-import { join } from "@/services/accountService";
+import { join } from "@/Services/accountService";
 
 const router = useRouter();
 
@@ -58,7 +58,7 @@ const submit = async () => {
           />
           <label for="loginPw">패스워드</label>
         </div>
-        <button class="w-100 h6 btn py-3 btn-primary">회원가입</button>
+        <button class="w-100 h6 btn py-3 bg-black btn-primary" style="border: none;">회원가입</button>
       </form>
     </div>
   </div>

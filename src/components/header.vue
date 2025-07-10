@@ -19,7 +19,7 @@ const logoutAccount = async () => {
 
 <template>
   <header>
-    <div class="navbar navbar-dark bg-dark text-white shadow-sm">
+    <div class="navbar custom-navbar text-white shadow-sm">
       <div class="container">
         <router-link to="/" class="navbar-brand">
           <strong>Gallery</strong>
@@ -41,13 +41,28 @@ const logoutAccount = async () => {
 </template>
 
 <style lang="scss" scoped>
+
+strong {
+  color: white;
+}
+
+.custom-navbar {
+  background-color: darkblue; /* 원하는 색상 (보라색 예시) */
+  color: #fff;
+}
+
 header {
   .menus {
     a {
       cursor: pointer;
       color: #fff;
       text-decoration: none;
+      color: white;
+
+      &:hover {
+        color: yellow;
     }
   }
+}
 }
 </style>
