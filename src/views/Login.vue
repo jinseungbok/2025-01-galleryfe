@@ -1,7 +1,12 @@
 <script setup>
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { login } from "../Services/accountService";
+import { useAccountStore } from "@/stores/account";
+
+const account = useAccountStore();
+const username = ref('');
+const password = ref('');
 
 const router = useRouter();
 
@@ -19,6 +24,9 @@ const submit = async () => {
   switch (res.status) {
     case 200:
     const name = res.data.name || res.data.user?.name || "사용자";
+    account.setLoggedIn(true);
+    account.setName(name);
+    
     alert(`${name}님 로그인 되었습니다.`);
     await router.push("/");
       break;

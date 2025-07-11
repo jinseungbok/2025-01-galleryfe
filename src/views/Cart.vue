@@ -74,8 +74,8 @@ onMounted( () => {
                     <div>총 합계: {{ totalPrice.toLocaleString() }}원</div>
                 </div>
                 <div class="act d-flex justify-contents-between gap-5">
-                    <button @click="clear" class="btn btn-danger mb-3">장바구니 비우기</button>
-                    <router-link to="/order" class="btn btn-primary mb-3">주문하기</router-link>
+                    <button @click="clear" class="btn bg-black btn-danger mb-3" style="border: none;">장바구니 비우기</button>
+                    <router-link to="/order" class="btn bg-black btn-primary mb-3" style="border: none;">주문하기</router-link>
                 </div>
             </template>
             <template v-else>

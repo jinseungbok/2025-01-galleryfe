@@ -1,8 +1,25 @@
 <script setup>
 import { useAccountStore } from "@/stores/account";
 import { logout } from "@/Services/accountService";
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 
-const account = useAccountStore();
+const account = useAccountStore(); // 먼저 선언
+
+const name = computed( () => account.state.name || "사용자"); // 반응형으로 상태를 계속 바라봄
+
+const isBlink = ref(true);
+let intervalId;
+
+onMounted(() => {
+  intervalId = setInterval(() => {
+    isBlink.value = !isBlink.value; // 1초마다 토글
+  }, 1000);
+});
+
+onUnmounted(() => {
+  clearInterval(intervalId);
+});
+
 // 로그아웃
 const logoutAccount = async () => {
   if (!confirm("로그아웃 하시겠습니까?")) {
@@ -24,6 +41,9 @@ const logoutAccount = async () => {
         <router-link to="/" class="navbar-brand">
           <strong>Gallery</strong>
         </router-link>
+        <div>
+          <span :class="['blinking', { off: !isBlink }]">{{ name }}님 환영합니다.</span>
+        </div>
         <div class="menus d-flex gap-3">
           <template v-if="account.state.loggedIn">
             <a @click="logoutAccount">로그아웃</a>
@@ -41,6 +61,14 @@ const logoutAccount = async () => {
 </template>
 
 <style lang="scss" scoped>
+.blinking {
+  color: gray;
+  transition: color 0.5s ease;
+}
+.blinking.off {
+  color: transparent;
+  transition: color 0.5s ease;
+}
 
 strong {
   color: white;
@@ -55,14 +83,13 @@ header {
   .menus {
     a {
       cursor: pointer;
-      color: #fff;
-      text-decoration: none;
       color: white;
+      text-decoration: none;
 
       &:hover {
         color: yellow;
+      }
     }
   }
-}
 }
 </style>

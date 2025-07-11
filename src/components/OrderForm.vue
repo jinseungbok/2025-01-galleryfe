@@ -18,23 +18,34 @@ const state = reactive({
 });
 
 const submit = async () => {
-    if(state.form.payment !== "card") { // 결제수단이 카드가 아닌 경우
-        // 카드번호를 지운다.
+    if( state.form.payment !== 'card' ) { //결제수단이 카드가 아니라면
+        //카드번호를 지운다. 
         state.form.cardNumber = '';
     }
     state.form.itemIds = state.items.map(item => item.itemId);
     const res = await addOrder(state.form);
-};
+    if( res === undefined || res.status !== 200 ) {
+        alert('결제 중 오류가 발생하였습니다. 다시 시도해 주세요.');
+        return;
+    }
+    const message = [ '주문이 완료되었습니다.' ];
+    if( state.form.payment === 'bank' ) {
+        const price = computedTotalPrice.value.toLocaleString();
+        message.push(`한국은행 123-456-777 계좌로 ${price}원을 입금해주시기 바랍니다.`);
+    }
+
+    alert(message.join('\n'));
+    await router.push('/');
+}
 
 onMounted(async () => {
     const res = await getItems();
     if(res === undefined || res.status !== 200) { return; }
-    console.log('items from server:', res.data); // 확인용
     state.items = res.data;
-})
+});
 
-const computedTotalPrice = computed( () => {
-    const result = state.items.reduce( (prev, next) => {
+const computedTotalPrice = computed(() => {
+    const result = state.items.reduce((prev, next) => {
         return prev + (next.price - (next.price * next.discountPer) * 0.01);
     }, 0);
     return result.toLocaleString();
@@ -106,8 +117,8 @@ const computedTotalPrice = computed( () => {
                             <label for="card">신용카드</label>
                         </div>
                         <div class="form-check">
-                            <input id="card" name="paymentMethod" type="radio" class="form-check-input" value="bank" v-model="state.form.payment">
-                            <label for="card">무통장입금</label>
+                            <input id="bank" name="paymentMethod" type="radio" class="form-check-input" value="bank" v-model="state.form.payment">
+                            <label for="bank">무통장입금</label>
                         </div>
                         <div class="pt-1" v-if="state.form.payment === 'card'">
                             <label for="cardNum" class="form-label">카드 번호</label>
