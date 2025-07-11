@@ -1,6 +1,7 @@
 <script setup>
 import { reactive, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import { getOrder } from '@/Services/orderService';
 
 const route = useRoute();
 
@@ -18,7 +19,15 @@ const state = reactive({
 
 onMounted( async () => {
     // 통신
+    const orderId = route.params.id;
+    const res = await getOrder(orderId);
+    if(res === undefined || res.status !== 200) {
+        alert("통신 중 오류가 발생하였습니다.");
+        return;
+    }
+    state.order = res.data;
 });
+
 </script>
 
 <template>

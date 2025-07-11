@@ -39,7 +39,7 @@ const logoutAccount = async () => {
     <div class="navbar custom-navbar text-white shadow-sm">
       <div class="container">
         <router-link to="/" class="navbar-brand">
-          <strong>Gallery</strong>
+          <strong>Atelier Works</strong>
         </router-link>
         <div>
           <span :class="['blinking', { off: !isBlink }]">{{ name }}님 환영합니다.</span>
@@ -71,11 +71,11 @@ const logoutAccount = async () => {
 }
 
 strong {
-  color: white;
+  color: #ffcbcd;
 }
 
 .custom-navbar {
-  background-color: darkblue; /* 원하는 색상 (보라색 예시) */
+  background-color: #313131; /* 원하는 색상 (보라색 예시) */
   color: #fff;
 }
 
