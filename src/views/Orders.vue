@@ -35,14 +35,14 @@ onMounted( async () => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(o, idx) in state.orders">
+                    <tr v-for="(item, idx) in state.orders" :key="item.id">
                         <td class="text-center">{{ state.orders.length - idx }}</td>
-                        <td>{{  o.name }}</td>
-                        <td>{{  o.payment === 'card' ? '카드' : '무통장입금' }}</td>
-                        <td>{{  o.amount.toLocaleString() }}원</td>
-                        <td>{{  o.created.toLocaleString() }}</td>
+                        <td>{{  item?.name }}</td>
+                        <td>{{  item?.payment === 'card' ? '카드' : '무통장입금' }}</td>
+                        <td>{{  item?.amount.toLocaleString() }}원</td>
+                        <td>{{  item?.created.toLocaleString() }}</td>
                         <td>
-                            <router-link :to="`/orders/${o.id}`">자세히 보기</router-link>
+                            <router-link :to="`/orders/${item.id}`">자세히 보기</router-link>
                         </td>
                     </tr>
                 </tbody>
